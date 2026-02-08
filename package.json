@@ -1,0 +1,15 @@
+{
+  "name": "dear-patron",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "latest",
+    "@sveltejs/kit": "latest",
+    "svelte": "latest",
+    "vite": "latest"
+  }
+}
