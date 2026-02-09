@@ -1,35 +1,50 @@
 <script>
-    let phase = 'day';
-    let playerName = "";
-    let inputName = "";
-    function next() { phase = 'evening'; }
-    function submit() { playerName = inputName; phase = 'night'; }
+    import { gameState } from "$lib/stores.js";
+    import DayPhase from "$lib/components/DayPhase.svelte";
+    import EveningPhase from "$lib/components/EveningPhase.svelte";
+    import NightPhase from "$lib/components/NightPhase.svelte";
+    import NightmarePhase from "$lib/components/NightmarePhase.svelte";
+
+    import { onMount } from "svelte";
+
+    // Debug/Dev tools (optional)
+    function resetGame() {
+        gameState.set({ day: 0, phase: "Day", dialogueIndex: 0 });
+    }
 </script>
-<main class={phase}>
-    {#if phase === 'day'}
-        <div class="screen">
-            <h1>Dear Patron - Day 0</h1>
-            <p>少女「新しい学校、楽しみ！」</p>
-            <button on:click={next}>次へ</button>
-        </div>
-    {:else if phase === 'evening'}
-        <div class="screen">
-            <p>お名前を教えてください</p>
-            <input bind:value={inputName} />
-            <button on:click={submit}>送信</button>
-        </div>
+
+<div class="game-container">
+    {#if $gameState.phase === "Day"}
+        <DayPhase />
+    {:else if $gameState.phase === "Evening"}
+        <EveningPhase />
+    {:else if $gameState.phase === "Night"}
+        <NightPhase />
+    {:else if $gameState.phase === "Nightmare"}
+        <NightmarePhase />
     {:else}
-        <div class="screen">
-            <p>お待ちしておりました、{playerName}様。</p>
-            <button on:click={() => alert('お届けしました')}>【必須】最高級制服を贈る</button>
+        <div class="unknown-phase">
+            <p>Unknown Phase</p>
+            <button on:click={resetGame}>Reset</button>
         </div>
     {/if}
-</main>
+</div>
+
 <style>
-    :global(body) { margin: 0; padding: 0; }
-    .day { background: #87CEEB; }
-    .evening { background: #FFDAB9; }
-    .night { background: #1a1a2e; color: gold; }
-    .screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: sans-serif; }
-    button { padding: 10px 20px; cursor: pointer; }
+    :global(body) {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        background: #000;
+        color: #fff;
+        overflow: hidden; /* Prevent scroll on main body, handle in components */
+    }
+
+    .game-container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
